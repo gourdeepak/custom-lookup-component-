@@ -1,0 +1,112 @@
+<template>
+    <div>
+        <div class="slds-form-element">
+            <!-- Header Label -->
+            <template if:true={labelname}>
+                <label class="slds-form-element__label">
+                     <template if:true={strrequired}>
+                    <abbr title="required" class="slds-required">*</abbr>
+                    </template>
+                    {labelname}
+                </label>
+            </template>
+            <div class="slds-form-element__control">
+                <div class="slds-combobox_container">
+                    <div id="box" class={boxClass} aria-expanded="true" aria-haspopup="listbox" role="combobox">
+                        <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right"
+                            role="none">
+                            <template if:true={isValueSelected}>
+                                <div class="selectedOption">
+                                    <div class="slds-form_horizontal slds-form slds-grid slds-wrap">
+                                        <span class="slds-icon_container slds-combobox__input-entity-icon">
+                                            <lightning-icon icon-name={icon} size="x-small" alternative-text="icon">
+                                            </lightning-icon>
+                                        </span>
+                                        <input type="text" id="combobox-id-1" value={selectedName}
+                                            class="slds-input slds-combobox__input slds-combobox__input-value search-result_left-pad"
+                                            disabled={strDisabled} readonly />
+                                        <template if:false={strDisabled}>
+                                            <button
+                                                class="slds-button slds-button_icon slds-input__icon slds-input__icon_right utility-color"
+                                                title="Remove selected option">
+                                                <lightning-icon icon-name="utility:close" size="x-small"
+                                                    alternative-text="close icon" onclick={handleRemovePill}>
+                                                </lightning-icon>
+                                            </button>
+                                        </template>
+                                    </div>
+                                </div>
+                            </template>
+                            <template if:false={isValueSelected}>
+                                <div class="slds-p-top_none">
+                                    <div class="slds-input-has-icon slds-input-has-icon_right"
+                                        style="width: -webkit-fill-available;">
+                                        <div class="icon-container" style="pointer-events: painted;">
+                                            <template if:false={isInvalidSelect}>
+                                                <lightning-icon size="x-small"
+                                                    class="front slds-input__icon slds-input__icon_right"
+                                                    icon-name="utility:search"></lightning-icon>
+                                            </template>
+                                            <template if:true={isInvalidSelect}>
+                                                <lightning-icon size="x-small"
+                                                    class="front slds-input__icon slds-input__icon_right"
+                                                    style="position:absolute; top: 35%;" icon-name="utility:search">
+                                                </lightning-icon>
+                                            </template>
+                                        </div>
+                                        <lightning-input class={inputClass} type="text" id="input" onfocus={handleClick}
+                                            onclick={handleClick} onblur={onBlur} onchange={onChange}
+                                            value={selectedValue} variant="label-hidden" autocomplete="off"
+                                            placeholder={placeholder} message-when-value-missing="Select value"
+                                            disabled={strDisabled}>
+                                        </lightning-input>
+                                        <template if:true={strrequired}>
+                                            <template if:true={isInvalidSelect}>
+                                                <div class="slds-text-align_left"
+                                                    style="color:#ea001e; font-size:12px;"> Select value from dropdown
+                                                </div>
+                                            </template>
+                                        </template>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                        <div id="listbox-id-1" class="slds-dropdown slds-dropdown_length-5 slds-dropdown_fluid">
+                            <!--style="{! 'max-height:' + (8 + (v.recordCount * 40)) + 'px' }""-->
+                            <ul class="slds-listbox slds-listbox_vertical recordListBox" role="presentation">
+                                <template for:each={records} for:item="record">
+                                    <li key={record.Id} onclick={onSelect} data-id={record.Id} role="presentation"
+                                        data-name={record.Name}
+                                        class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta"
+                                        tabindex="0">
+                                        <span class="slds-media__figure slds-listbox__option-icon">
+                                            <span class="slds-icon_container">
+                                                <lightning-icon icon-name={icon} size="small"></lightning-icon>
+                                            </span>
+                                        </span>
+                                        <span class="slds-media__body">
+                                            <template if:true={record.otherField}>
+                                                <span title={record.Name}>{record.Name}</span>
+                                                <span
+                                                    class="slds-listbox__option-text_entity  slds-text-color_weak slds-text-body_small">{record.otherField}</span>
+                                            </template>
+                                            <template if:false={record.otherField}>
+                                                <span title={record.Name}
+                                                    class="slds-listbox__option-text slds-listbox__option-text_entity slds-p-top_x-small">{record.Name}</span>
+                                            </template>
+                                        </span>
+                                    </li>
+                                </template>
+                                <!--ERROR msg, if there is no records..-->
+                                <template if:false={hasRecords}>
+                                    <li class="slds-listbox__item" style="text-align: center; font-weight: bold;">No
+                                        Result Found....</li>
+                                </template>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
